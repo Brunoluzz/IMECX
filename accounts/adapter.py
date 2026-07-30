@@ -21,6 +21,13 @@ class IMECXAccountAdapter(DefaultAccountAdapter):
             context
         )
 
+        html_content = None
+
+        for content, mimetype in message.alternatives:
+            if mimetype == "text/html":
+                html_content = content
+                break
+
         response = requests.post(
             "https://api.brevo.com/v3/smtp/email",
             headers={
@@ -39,7 +46,7 @@ class IMECXAccountAdapter(DefaultAccountAdapter):
                     }
                 ],
                 "subject": message.subject,
-                "htmlContent": message.body,
+                "htmlContent": html_content or message.body,
             },
             timeout=10,
         )
