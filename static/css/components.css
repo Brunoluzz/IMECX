@@ -183,13 +183,13 @@
     border-color: #BBF7D0;
     color: #166534;
     align-items: center;
-
 }
 
 .message.info {
     background: #EFF6FF;
     border-color: #BFDBFE;
     color: #1D4ED8;
+    align-items: center;
 }
 
 .message-icon {
