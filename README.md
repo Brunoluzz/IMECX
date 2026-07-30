@@ -26,6 +26,11 @@ Plataforma web desenvolvida em Django para gestão de candidaturas, participante
 ## Capturas de ecrã
 
 <img width="1864" height="956" alt="image" src="https://github.com/user-attachments/assets/635d09e6-ed09-41a8-b377-f2d2a0ea221f" />
+<img width="1861" height="953" alt="image" src="https://github.com/user-attachments/assets/41ffab77-51b7-4753-83db-968457b46b57" />
+<img width="1863" height="956" alt="image" src="https://github.com/user-attachments/assets/b0381480-47c5-45b2-b773-59f40f842808" />
+
+
+
 
 
 ## Como executar
