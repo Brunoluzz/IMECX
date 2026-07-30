@@ -1,6 +1,6 @@
 from allauth.account.adapter import DefaultAccountAdapter
-from django.http import Http404
-
+from django.conf import settings
+import requests
 
 class IMECXAccountAdapter(DefaultAccountAdapter):
 
@@ -12,3 +12,36 @@ class IMECXAccountAdapter(DefaultAccountAdapter):
 
     def is_open_for_signup(self, request):
         return False
+
+    def send_mail(self, template_prefix, email, context):
+
+        message = self.render_mail(
+            template_prefix,
+            email,
+            context
+        )
+
+        response = requests.post(
+            "https://api.brevo.com/v3/smtp/email",
+            headers={
+                "accept": "application/json",
+                "api-key": settings.BREVO_API_KEY,
+                "content-type": "application/json",
+            },
+            json={
+                "sender": {
+                    "name": "IMECX",
+                    "email": settings.DEFAULT_FROM_EMAIL,
+                },
+                "to": [
+                    {
+                        "email": email,
+                    }
+                ],
+                "subject": message.subject,
+                "htmlContent": message.body,
+            },
+            timeout=10,
+        )
+
+        response.raise_for_status()
