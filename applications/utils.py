@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+import requests
 
 
 def send_account_activation_email(user, edition):
@@ -39,16 +40,27 @@ def send_account_activation_email(user, edition):
         }
     )
 
-    email = EmailMultiAlternatives(
-        subject=subject,
-        body="Define a tua palavra-passe.",
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=[user.email],
+    response = requests.post(
+        "https://api.brevo.com/v3/smtp/email",
+        headers={
+            "accept": "application/json",
+            "api-key": settings.BREVO_API_KEY,
+            "content-type": "application/json",
+        },
+        json={
+            "sender": {
+                "name": "IMECX",
+                "email": settings.DEFAULT_FROM_EMAIL,
+            },
+            "to": [
+                {
+                    "email": user.email,
+                }
+            ],
+            "subject": subject,
+            "htmlContent": html_content,
+        },
+        timeout=10,
     )
 
-    email.attach_alternative(
-        html_content,
-        "text/html"
-    )
-
-    email.send()
+    response.raise_for_status()
