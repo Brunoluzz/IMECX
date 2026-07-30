@@ -150,7 +150,7 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = "[IMECX] "
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
-SITE_URL = "http://127.0.0.1:8000"
+SITE_URL = "https://brunnohsaidegh.pythonanywhere.com"
 
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
