@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Sobre — Imecx{% endblock %}
+
+{% block content %}
+<div class="container section">
+  <span class="section__label">Sobre o Imecx</span>
+  <h1 class="section__title">Engenharia interdisciplinar, feita por estudantes.</h1>
+  <p class="section__subtitle">Nascido em ambiente académico, o Imecx é um programa anual que seleciona estudantes de diferentes ramos para colaborarem num projeto real. Aprendemos fazendo, em equipa, com apoio de docentes e parceiros.</p>
+
+  <div class="grid grid--3 mt-8" style="margin-top:3rem">
+    <div class="card"><h3>Missão</h3><p style="color:var(--muted);margin-top:.75rem">Formar engenheiros capazes de pensar e colaborar para além da sua área.</p></div>
+    <div class="card"><h3>Visão</h3><p style="color:var(--muted);margin-top:.75rem">Ser referência de educação prática e interdisciplinar em engenharia.</p></div>
+    <div class="card"><h3>Valores</h3><p style="color:var(--muted);margin-top:.75rem">Curiosidade, rigor técnico, cooperação e responsabilidade.</p></div>
+  </div>
+
+  <h2 style="margin-top:5rem;font-size:2rem">A nossa história</h2>
+  <div class="grid grid--2 mt-8">
+    {% for y, t in milestones %}
+      <div class="card milestone" style="align-items:center;">
+        <div class="milestone__year">{{ y }}</div>
+        <p style="color:var(--muted);padding-top:.3rem">{{ t }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

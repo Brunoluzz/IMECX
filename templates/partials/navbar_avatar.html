@@ -1,0 +1,29 @@
+<div class="imecx-avatar-wrapper">
+  {% if user.is_authenticated %}
+    <button type="button" class="imecx-avatar-btn" id="imecx-avatar-toggle"
+            style="background-color: {{ user.profile.avatar_color }};">
+      {{ user.profile.initials }}
+    </button>
+
+    <div class="imecx-avatar-dropdown" id="imecx-avatar-dropdown">
+      <a href="{% url 'accounts:area_pessoal' %}">A minha área</a>
+      {% if active_participation %}
+      <a href="{% url 'tasks:my_tasks'%}">
+          Minhas Tasks
+      </a>
+      {% endif %}
+      <a href="{% url 'accounts:profile_edit' %}">Editar perfil</a>
+      <form method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="imecx-avatar-logout">Terminar sessão</button>
+      </form>
+    </div>
+
+  {% else %}
+    <a href="{% url 'account_login' %}" class="imecx-avatar-btn imecx-avatar-guest" aria-label="Entrar">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+        <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+      </svg>
+    </a>
+  {% endif %}
+</div>

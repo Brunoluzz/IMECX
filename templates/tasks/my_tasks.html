@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}As Minhas Tasks — IMECX{% endblock %}
+
+{% block content %}
+
+<div class="container section">
+
+    <span class="section__label">
+        Participante
+    </span>
+
+    <h1 class="section__title">
+        As Minhas Tasks
+    </h1>
+
+    <p class="section__subtitle">
+        Acompanha as tarefas atribuídas e o estado das tuas submissões.
+    </p>
+
+    {% if tasks %}
+
+    <div class="grid grid--3 mt-8">
+
+        {% for task in tasks %}
+
+        <div class="card">
+
+            <div class="dashboard-card__header">
+
+                <h3>
+                    {{ task.title }}
+
+                    {% if task.deadline %}
+                        <span class="badge badge--primary">
+                            Prazo
+                        </span>
+                    {% endif %}
+                </h3>
+
+            </div>
+
+            <p style="color:var(--muted); margin-top:.75rem;">
+                {{ task.description|truncatechars:120 }}
+            </p>
+
+            {% if task.deadline %}
+            <p style="margin-top:1rem;">
+                <strong>Até:</strong>
+                {{ task.deadline|date:"d/m/Y H:i" }}
+            </p>
+            {% endif %}
+
+            {% with submission=task.submissions.first %}
+
+                {% if submission %}
+
+                    <div style="margin-top:1rem;">
+
+                        {% if submission.status == "approved" %}
+                            <span class="badge badge--primary">
+                                Aprovada
+                            </span>
+
+                        {% elif submission.status == "revision" %}
+                            <span class="badge badge--dark">
+                                Revisão
+                            </span>
+
+                        {% elif submission.status == "rejected" %}
+                            <span class="badge badge--dark">
+                                Rejeitada
+                            </span>
+
+                        {% else %}
+                            <span class="badge badge--muted">
+                                Submetida
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endwith %}
+
+            <div style="margin-top:1.5rem;">
+
+                <a
+                    href="{% url 'tasks:task_detail' task.id %}"
+                    class="btn-primary"
+                >
+                    Ver Task
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="card">
+
+        <h3>
+            Nenhuma task atribuída
+        </h3>
+
+        <p style="margin-top:.75rem;color:var(--muted);">
+            Ainda não tens tarefas atribuídas nesta edição.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

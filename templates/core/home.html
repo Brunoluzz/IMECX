@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero__grid"></div>
+  <div class="container hero__inner">
+    <span class="section__label section__label--invert">Edição {% if current_edition %}{{ current_edition.year }}{% else %}{% now "Y" %}{% endif %}</span>
+    <h1>Engenharia que <em>colabora</em>, estudantes que <em>constroem</em>.</h1>
+    <p>O Imecx é o programa anual onde estudantes de diferentes ramos de engenharia se juntam para desenvolver um projeto interdisciplinar, do conceito ao protótipo.</p>
+    <div class="hero__cta">
+      <a href="{% url 'applications:apply' %}" class="btn-primary">Candidatar à edição</a>
+      <a href="{% url 'core:about' %}" class="btn-ghost btn-ghost--invert">Conhecer o programa</a>
+    </div>
+  </div>
+</section>
+
+{% if current_edition.status == 'open' %} 
+  <section class="container">
+    {% if current_edition.applications_close %}
+      <div class="card countdown" data-countdown="{{ current_edition.applications_close|date:'c' }}">
+    {% else %}
+      <div class="card countdown" data-countdown="{% now 'Y' %}-09-30T23:59:59">
+    {% endif %}
+      <div class="countdown__cell"><div class="countdown__num" data-d>00</div><div class="countdown__lbl">Dias</div></div>
+      <div class="countdown__cell"><div class="countdown__num" data-h>00</div><div class="countdown__lbl">Horas</div></div>
+      <div class="countdown__cell"><div class="countdown__num" data-m>00</div><div class="countdown__lbl">Minutos</div></div>
+      <div class="countdown__cell"><div class="countdown__num" data-s>00</div><div class="countdown__lbl">Segundos</div></div>
+    </div>
+    <p class="countdown__caption">Tempo até ao fecho de candidaturas</p>
+  </section>
+
+{% elif current_edition.status == 'full' %}
+
+  <section class="container">
+    <div class="card" style="text-align: center; position: relative; margin-top: -3rem; border-top: 4px solid var(--blue-vivid);">
+      
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.2em; color: var(--blue-vivid); text-transform: uppercase; margin-bottom: 1rem;">
+        Edição Lotada
+      </div>
+      
+      <h2 style="font-size: 2rem; color: var(--blue-dark); margin-bottom: 1rem;">
+        Candidaturas Encerradas
+      </h2>
+      
+      <p style="color: var(--muted); font-size: 1.1rem; max-width: 38rem; margin: 0 auto; line-height: 1.6;">
+        Obrigado pelo enorme interesse! As vagas para esta edição foram totalmente preenchidas e o período de candidaturas encontra-se fechado. Fica atento para futuras oportunidades.
+      </p>
+      
+    </div>
+  </section>
+
+{% elif current_edition.status == 'closed' %}
+  <section class="container">
+    <div class="card" style="text-align: center; position: relative; margin-top: -3rem; border-top: 4px solid var(--muted);">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.2em; color: var(--blue-vivid); text-transform: uppercase; margin-bottom: 1rem;">
+        Edição fechada
+      </div>
+      <h2 style="font-size: 1.75rem; color: var(--blue-dark); margin-bottom: 0.5rem;">Candidaturas Fechadas</h2>
+      <p style="color: var(--muted); margin: 0 auto; max-width: 35rem;">
+        O prazo de candidaturas para esta edição terminou. Estamos atualmente a avaliar os perfis submetidos.
+      </p>
+    </div>
+  </section>
+
+{% elif current_edition.status == 'upcoming' %}
+  <section class="container">
+    <div class="card" style="text-align: center; position: relative; margin-top: -3rem; border-top: 4px solid var(--blue-vivid);">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.2em; color: var(--blue-vivid); text-transform: uppercase; margin-bottom: 1rem;">
+        Edição por iniciar
+      </div>
+      <h2 style="font-size: 1.75rem; color: var(--blue-dark); margin-bottom: 0.5rem;">Nova Edição Brevemente</h2>
+      <p style="color: var(--muted); margin: 0 auto; max-width: 35rem;">
+        Estamos a preparar os últimos detalhes para a próxima edição da Imecx. As datas serão anunciadas muito em breve!
+      </p>
+    </div>
+  </section>
+
+{% elif current_edition.status == 'active' %}
+  <section class="container">
+    <div class="card" style="text-align: center; position: relative; margin-top: -3rem; border-top: 4px solid var(--blue-vivid);">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.2em; color: var(--blue-vivid); text-transform: uppercase; margin-bottom: 1rem;">
+        Edição a decorrer
+      </div>
+      <h2 style="font-size: 1.75rem; color: var(--blue-dark); margin-bottom: 0.5rem;">Programa em Andamento</h2>
+      <p style="color: var(--muted); margin: 0 auto; max-width: 35rem;">
+        A edição atual já começou! Os participantes encontram-se neste momento a desenvolver as suas atividades no Departamento de Engenharia Mecânica.
+      </p>
+    </div>
+  </section>
+
+{% elif current_edition.status == 'finished' %}
+  <section class="container">
+    <div class="card" style="text-align: center; position: relative; margin-top: -3rem; border-top: 4px solid var(--blue-vivid);">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.2em; color: var(--blue-vivid); text-transform: uppercase; margin-bottom: 1rem;">
+        Edição terminada
+      </div>
+      <h2 style="font-size: 1.75rem; color: var(--blue-dark); margin-bottom: 0.5rem;">Edição Concluída</h2>
+      <p style="color: var(--muted); margin: 0 auto; max-width: 35rem;">
+        Esta edição chegou ao fim com sucesso. Obrigado a todos os participantes, parceiros e mentores envolvidos!
+      </p>
+    </div>
+  </section>
+
+{% endif %}
+
+<section class="section container">
+  <div class="grid grid--2" style="align-items:flex-start">
+    <div>
+      <span class="section__label">A nossa missão</span>
+      <h2 class="section__title">Um projeto. Várias engenharias. Uma equipa.</h2>
+    </div>
+    <p style="font-size:1.1rem;color:var(--muted)">
+      Acreditamos que a engenharia do futuro nasce do cruzamento de disciplinas. No Imecx, equipas multidisciplinares trabalham, durante um ano letivo, num desafio real proposto por parceiros da indústria — passando por investigação, design, prototipagem e validação.
+    </p>
+  </div>
+
+  <div class="grid grid--3 mt-8" style="margin-top:4rem">
+    {% for area in areas %}
+      <article class="card">
+        <div style="font-family:var(--font-display);font-weight:700;font-size:.72rem;letter-spacing:.2em;color:var(--blue-vivid)">{{ forloop.counter|stringformat:"02d" }}</div>
+        <h3 style="font-size:1.3rem;margin-top:.75rem">Eng. {{ area.name }}</h3>
+        <p style="color:var(--muted);margin-top:.5rem">Área participante do programa Imecx.</p>
+      </article>
+    {% empty %}
+      {% for placeholder in "123456" %}
+        <article class="card">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:.72rem;letter-spacing:.2em;color:var(--blue-vivid)">0{{ forloop.counter }}</div>
+          <h3 style="font-size:1.3rem;margin-top:.75rem">Engenharia</h3>
+          <p style="color:var(--muted);margin-top:.5rem">Configura as áreas no /admin para aparecerem aqui.</p>
+        </article>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section section--muted">
+  <div class="container grid grid--3 text-center">
+    <div><div class="stats__num">30+</div><div class="stats__lbl">Estudantes envolvidos</div></div>
+    <div><div class="stats__num">1</div><div class="stats__lbl">Projetos concluídos</div></div>
+    <div><div class="stats__num">0</div><div class="stats__lbl">Parceiros da indústria</div></div>
+  </div>
+</section>
+
+{% if current_edition.status == 'open' %} 
+<section class="section container">
+  <div class="cta-banner">
+    <h2>Pronto para construir algo real?</h2>
+    <p>As candidaturas para a próxima edição estão abertas. Junta-te à equipa interdisciplinar do Imecx.</p>
+    <a href="{% url 'applications:apply' %}" class="btn-ghost btn-ghost--solid mt-6">Candidatar-me agora →</a>
+  </div>
+</section>
+{% endif %} 
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/countdown.js' %}"></script>
+{% endblock %}

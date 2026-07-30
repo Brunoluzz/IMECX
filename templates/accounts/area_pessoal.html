@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block title %}Área Pessoal — IMECX{% endblock %}
+
+{% block content %}
+
+<div class="container section">
+
+    <span class="section__label">
+        Área Pessoal
+    </span>
+
+    <h1 class="section__title">
+        Olá, {{ user.first_name|default:user.username }}
+    </h1>
+
+    <p class="section__subtitle">
+        Consulta o teu percurso no IMECX, acompanha a edição atual
+        e gere a tua participação nas várias edições do programa.
+    </p>
+
+    {% if active_participation %}
+    <section class="mt-8">
+
+        <div class="dashboard-section-header">
+
+            <h2 class="dashboard-section-title">
+                Participação Atual
+            </h2>
+
+        </div>
+
+        <div class="card dashboard-current-card">
+
+            <h3 class="dashboard-current-title" style = "margin-bottom: 7px">
+                IMECX {{ active_participation.edition.year }}
+
+                {% if active_participation.edition.theme %}
+                    <span>
+                        - {{ active_participation.edition.theme }}
+                    </span>
+                {% endif %}
+            </h3>
+
+            <div class="dashboard-current-meta" style = "margin-bottom: 20px">
+
+                <div>
+                    <strong>Estado:</strong>
+                    <span>
+                        {{ active_participation.get_status_display }}
+                    </span>
+                </div>
+
+                <div>
+                    <strong>Participante desde:</strong>
+                    <span>
+                        {{ active_participation.accepted_at|date:"d/m/Y" }}
+                    </span>
+                </div>
+
+            </div>
+            
+            <div class="dashboard-current-actions">
+
+                <a
+                    href="{% url 'tasks:my_tasks' %}"
+                    class="btn-primary"
+                >
+                    Ver Tasks
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+    {% endif %}
+
+    <section class="mt-8">
+
+        <div class="dashboard-section-header">
+
+            <h2 class="dashboard-section-title">
+                Histórico de Participações
+            </h2>
+
+            <p class="dashboard-section-subtitle">
+                Todas as edições em que participaste.
+            </p>
+
+        </div>
+
+        {% if participations %}
+
+            <div class="grid grid--3 mt-6">
+
+                {% for participation in participations %}
+
+                <div class="card card--interactive">
+
+                    <div class="dashboard-card-header">
+
+                        <h3>
+                            IMECX {{ participation.edition.year }}
+                        </h3>
+
+                        {% if participation.is_current %}
+                            <span class="badge badge--primary">
+                                Atual
+                            </span>
+                        {% elif participation.is_past %}
+                            <span class="badge badge--muted">
+                                Concluída
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                    {% if participation.edition.theme %}
+                    <p class="dashboard-card-theme">
+                        {{ participation.edition.theme }}
+                    </p>
+                    {% endif %}
+
+                    <p class="dashboard-card-status">
+                        {{ participation.get_status_display }}
+                    </p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="card dashboard-empty">
+
+                <h3>
+                    Sem participações registadas
+                </h3>
+
+                <p>
+                    Ainda não existem participações associadas à tua conta.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+    <section class="mt-8">
+
+        <div class="dashboard-section-header">
+
+            <h2 class="dashboard-section-title">
+                Histórico de Candidaturas
+            </h2>
+
+            <p class="dashboard-section-subtitle">
+                Consulta todas as candidaturas submetidas.
+            </p>
+
+        </div>
+
+        {% if applications %}
+
+            <div class="grid grid--3 mt-6">
+
+                {% for application in applications %}
+
+                <div class="card card--interactive">
+
+                    <div class="dashboard-card-header">
+                        <h3>
+                            IMECX {{ application.edition.year }}
+                        </h3>
+                    </div>
+
+                    <p>
+                        <strong>Estado da candidatura:</strong>
+
+                        {% if application.status == "accepted" %}
+                            <span class="badge badge--primary">
+                                Aceite
+                            </span>
+
+                        {% elif application.status == "rejected" %}
+                            <span class="badge badge--dark">
+                                Rejeitada
+                            </span>
+
+                        {% else %}
+                            <span class="badge badge--muted">
+                                {{ application.get_status_display }}
+                            </span>
+                        {% endif %}
+                    </p>
+
+                    <p>
+                        <strong>Área:</strong>
+                        <span class="dashboard-card-theme">
+                            {{ application.area.name }}
+                        </span>
+                    </p>
+
+                    <p class="dashboard-card-date">
+                        {{ application.created_at|date:"d/m/Y" }}
+                    </p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="card dashboard-empty">
+
+                <h3>
+                    Sem candidaturas registadas
+                </h3>
+
+                <p>
+                    Ainda não existem candidaturas associadas à tua conta.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}

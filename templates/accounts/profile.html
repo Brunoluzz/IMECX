@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}O meu perfil — Imecx{% endblock %}
+
+{% block content %}
+<div class="container section">
+  <span class="section__label">Área de aluno</span>
+  <h1 class="section__title">Olá, {{ user.profile.full_name|default:user.email }}</h1>
+  <p class="section__subtitle">Esta é a tua área pessoal. Aqui poderás acompanhar a tua candidatura e atualizar o teu perfil.</p>
+
+  <div class="grid grid--2 mt-8" style="margin-top:2rem">
+    <div class="card">
+      <h3>Dados da conta</h3>
+      <p style="color:var(--muted);margin-top:.5rem">Email: {{ user.email }}</p>
+      <a href="{% url 'account_logout' %}" class="btn-ghost mt-6" style="margin-top:1.5rem">Terminar sessão</a>
+    </div>
+    <div class="card">
+      <h3>As minhas candidaturas</h3>
+      {% for app in user.application_set.all %}
+        <div style="display:flex;justify-content:space-between;margin-top:.75rem">
+          <span>Imecx {{ app.edition.year }}</span>
+          <span class="badge badge--muted">{{ app.get_status_display }}</span>
+        </div>
+      {% empty %}
+        <p style="color:var(--muted);margin-top:.5rem">Ainda não tens candidaturas submetidas.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

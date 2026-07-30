@@ -1,0 +1,43 @@
+{% extends "account/auth_base.html" %}
+
+{% block title %}Verifica o teu email — IMECX{% endblock %}
+
+{% block auth_title %}
+Verifica o teu email
+{% endblock %}
+
+{% block auth_subtitle %}
+<p class="section__subtitle">
+    Falta apenas um último passo para ativares a tua conta.
+</p>
+{% endblock %}
+
+{% block auth_content %}
+
+<div class="text-center">
+
+    <div class="status-card__icon">
+        ✉️
+    </div>
+
+    <p class="mt-6">
+        Enviámos um email de confirmação para o endereço que indicaste.
+    </p>
+
+    <p class="mt-4">
+        Abre a tua caixa de entrada e clica na ligação de confirmação para
+        ativares a tua conta e poderes aceder à área pessoal.
+    </p>
+
+    <div class="form-actions mt-8">
+
+        <a class="btn-primary"
+           href="{% url 'account_login' %}">
+            Voltar ao login
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

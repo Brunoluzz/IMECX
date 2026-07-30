@@ -1,0 +1,41 @@
+{% extends "account/auth_base.html" %}
+
+{% block title %}
+Email confirmado — IMECX
+{% endblock %}
+
+{% block auth_content %}
+
+<div class="status-card">
+
+    <div class="status-card__icon">
+        ✅
+    </div>
+
+    <h2 class="status-card__title">
+        Email confirmado
+    </h2>
+
+    <p class="status-card__text">
+
+        A tua conta foi confirmada com sucesso.
+
+        Já podes aceder à tua área pessoal.
+
+    </p>
+
+    <div class="form-actions">
+
+        <a
+            class="btn-primary"
+            href="{% url 'accounts:area_pessoal' %}">
+
+            Ir para a Área Pessoal
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

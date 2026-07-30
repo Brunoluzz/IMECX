@@ -1,0 +1,55 @@
+/* ============ pages.css — estilos específicos de página ============ */
+
+/* Hero */
+.hero { position: relative; overflow: hidden; color: var(--white); background: var(--gradient-hero); }
+.hero__grid {
+  position: absolute; inset: 0; opacity: .08; pointer-events: none;
+  background-image:
+    linear-gradient(var(--blue-vivid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--blue-vivid) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.hero__inner { position: relative; padding: 7rem 0 9rem; padding-left: 20px; }
+.hero h1 { color: var(--white); font-size: clamp(2.75rem, 6vw, 4.5rem); font-weight: 800; max-width: 56rem; margin-top: 1.5rem; }
+.hero h1 em { font-style: normal; color: var(--blue-vivid); }
+.hero p { margin-top: 1.5rem; max-width: 42rem; font-size: 1.15rem; opacity: .88; }
+.hero__cta { margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: .75rem; }
+
+/* Countdown */
+.countdown {
+  margin-top: -3rem; position: relative; z-index: 10;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+}
+.countdown__cell { text-align: center; }
+.countdown__num { font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 5vw, 3.25rem); color: var(--blue-dark); font-variant-numeric: tabular-nums; }
+.countdown__lbl { font-family: var(--font-display); font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .2em; margin-top: .3rem; }
+.countdown__caption { text-align: center; color: var(--muted); font-size: .9rem; margin-top: 1rem; }
+
+/* Stats */
+.stats__num { font-family: var(--font-display); font-weight: 800; font-size: 4rem; color: var(--blue-vivid); }
+.stats__lbl { font-family: var(--font-display); font-weight: 600; color: var(--blue-dark); margin-top: .25rem; }
+
+/* CTA banner */
+.cta-banner {
+  border-radius: 24px; padding: 4rem 2rem; text-align: center;
+  background: var(--gradient-brand); color: var(--white);
+}
+.cta-banner h2 { color: var(--white); font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; }
+.cta-banner p { margin-top: 1rem; opacity: .9; max-width: 32rem; margin-inline: auto; }
+
+/* Timeline / milestones */
+.milestone { display: flex; gap: 1.25rem; align-items: flex-start; }
+.milestone__year { font-family: var(--font-display); font-weight: 800; font-size: 2rem; color: var(--blue-vivid); min-width: 4rem; }
+
+/* Application page split */
+.apply-grid { display: grid; gap: 2.5rem; grid-template-columns: 1fr; margin-top: 3rem; }
+@media (min-width: 1024px) { .apply-grid { grid-template-columns: 1.4fr 1fr; } }
+
+/* Edition card */
+.edition-card__head { display: flex; align-items: center; justify-content: space-between; }
+.edition-card__year { font-family: var(--font-display); font-weight: 800; font-size: 3rem; color: var(--blue-dark); }
+
+.link_loc {
+  text-decoration: none;
+  color:var(--muted) !important;
+}

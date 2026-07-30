@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Candidaturas — Imecx{% endblock %}
+
+{% block content %}
+<div class="container section">
+  <span class="section__label">Candidaturas</span>
+  <h1 class="section__title">Faz parte da próxima edição.</h1>
+  <p class="section__subtitle">Preenche o formulário abaixo. A equipa do Imecx irá avaliar e responder no prazo de duas semanas após o fecho de candidaturas.</p>
+
+  {% if not edition %}
+    <div class="card mt-8" style="margin-top:2rem;border-left:4px solid var(--blue-vivid)">
+      <strong>De momento não há edição com candidaturas abertas.</strong>
+      <p style="color:var(--muted);margin-top:.4rem">Volta em breve ou acompanha-nos nas redes sociais.</p>
+    </div>
+  {% else %}
+  <div class="apply-grid">
+    <form method="post" enctype="multipart/form-data" class="card">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="field">
+          {{ field.label_tag }}
+          {{ field }}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn-primary" style="width:100%;justify-content:center">Submeter candidatura</button>
+    </form>
+
+    <aside style="display:flex;flex-direction:column;gap:1rem">
+      <div class="card"><h3 style="font-size:1.1rem">1. Submissão</h3><p style="color:var(--muted);font-size:.9rem;margin-top:.3rem">Envia o formulário online com os teus dados e motivação.</p></div>
+      <div class="card"><h3 style="font-size:1.1rem">2. Avaliação</h3><p style="color:var(--muted);font-size:.9rem;margin-top:.3rem">A equipa avalia perfil, motivação e compatibilidade com as áreas.</p></div>
+      <div class="card"><h3 style="font-size:1.1rem">3. Entrevista</h3><p style="color:var(--muted);font-size:.9rem;margin-top:.3rem">Conversa curta com a coordenação do programa.</p></div>
+      <div class="card"><h3 style="font-size:1.1rem">4. Seleção</h3><p style="color:var(--muted);font-size:.9rem;margin-top:.3rem">Comunicação dos selecionados e formação das equipas.</p></div>
+    </aside>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

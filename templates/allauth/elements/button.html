@@ -1,0 +1,13 @@
+{% load allauth %}
+{% comment %} djlint:off {% endcomment %}
+<{% if attrs.href %}a href="{{ attrs.href }}"{% else %}button{% endif %}
+class="{% if "outline" in attrs.tags|default:"" or "link" in attrs.tags|default:"" or "cancel" in attrs.tags|default:"" or "secondary" in attrs.tags|default:"" %}btn-ghost{% elif "danger" in attrs.tags|default:"" or "delete" in attrs.tags|default:"" %}btn-primary btn-primary--danger{% else %}btn-primary{% endif %}"
+{% if attrs.form %}form="{{ attrs.form }}"{% endif %}
+{% if attrs.id %}id="{{ attrs.id }}"{% endif %}
+{% if attrs.name %}name="{{ attrs.name }}"{% endif %}
+{% if attrs.value %}value="{{ attrs.value }}"{% endif %}
+{% if attrs.type %}type="{{ attrs.type }}"{% endif %}
+>
+{% slot %}
+{% endslot %}
+</{% if attrs.href %}a{% else %}button{% endif %}>

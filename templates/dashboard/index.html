@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Imecx{% endblock %}
+
+{% block content %}
+<div class="container section">
+  <span class="section__label">Dashboard interno</span>
+  <h1 class="section__title">Visão geral</h1>
+
+  <div class="grid grid--3 mt-8" style="margin-top:2rem">
+    <div class="card text-center"><div class="stats__num">{{ stats.applications }}</div><div class="stats__lbl">Candidaturas</div></div>
+    <div class="card text-center"><div class="stats__num">{{ stats.pending }}</div><div class="stats__lbl">Pendentes</div></div>
+    <div class="card text-center"><div class="stats__num">{{ stats.editions }}</div><div class="stats__lbl">Edições</div></div>
+  </div>
+
+  <p style="margin-top:2rem;color:var(--muted)">Para gestão completa, vai ao <a href="/admin/">Django Admin</a>.</p>
+</div>
+{% endblock %}

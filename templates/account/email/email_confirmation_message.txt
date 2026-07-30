@@ -1,0 +1,13 @@
+Olá,
+
+Recebemos um pedido para associar este endereço de email a uma conta na plataforma IMECX.
+
+Para confirmar o teu endereço de email, utiliza a ligação abaixo:
+
+{{ activate_url }}
+
+Se não foste tu a criar esta conta, podes ignorar esta mensagem.
+
+Cumprimentos,
+
+Equipa IMECX

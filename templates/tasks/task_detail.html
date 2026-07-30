@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="page">
+    <div class="container">
+
+    <div class="card">
+
+        <span class="section__label">
+            Task
+        </span>
+
+        <h1 class="section__title">
+            {{ task.title }}
+        </h1>
+
+        <p class="section__subtitle">
+            {{ task.description }}
+        </p>
+
+        {% if task.deadline %}
+
+            <div class="mt-6" style = "margin-bottom: 10px">
+
+                <span class="badge badge--dark">
+                    Prazo: {{ task.deadline }}
+                </span>
+
+            </div>
+
+        {% endif %}
+        
+        {% if submission %}
+
+            {% if submission.status == "approved" %}
+                <span class="badge badge--primary">
+                    Aprovada
+                </span>
+
+            {% elif submission.status == "revision" %}
+                <span class="badge badge--warning">
+                    Necessita revisão
+                </span>
+
+            {% elif submission.status == "rejected" %}
+                <span class="badge badge--dark">
+                    Rejeitada
+                </span>
+
+            {% else %}
+                <span class="badge badge--muted">
+                    Submetida
+                </span>
+            {% endif %}
+
+            <div class="message success persistent mt-6">
+
+                <div class="message-icon" style="align-items: center;">
+                    ✓
+                </div>
+
+                <p>
+                    Já submeteste esta task em
+                    {{ submission.submitted_at }}
+                </p>
+
+            </div>
+
+        {% else %}
+
+            <div class="message info persistent mt-6">
+
+                <div class="message-icon">
+                    ⏳
+                </div>
+
+                <p>
+                    Ainda não existe nenhuma submissão.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+        {% if submission and submission.admin_feedback %}
+
+        <div class="message info persistent mt-6">
+
+            <div class="message-icon">
+                💬
+            </div>
+
+            <div>
+
+                <strong>
+                    Feedback da equipa
+                </strong>
+
+                <p>
+                    {{ submission.admin_feedback }}
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+        <div class="form-actions">
+
+            <a
+                href="{% url 'tasks:submit_task' task.id %}"
+                class="btn-primary"
+            >
+                Submeter Trabalho
+            </a>
+
+            <a
+                href="{% url 'tasks:my_tasks' %}"
+                class="btn-ghost"
+            >
+                Voltar
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+{% endblock %}

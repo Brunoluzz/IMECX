@@ -1,0 +1,14 @@
+Olá,
+
+Obrigado por criares conta na plataforma IMECX.
+
+Para ativares a tua conta confirma o teu endereço de email através da ligação abaixo:
+
+{{ activate_url }}
+
+Se não criaste esta conta podes ignorar esta mensagem.
+
+--
+IMECX
+Núcleo de Estudantes de Engenharia Mecânica
+ISEC

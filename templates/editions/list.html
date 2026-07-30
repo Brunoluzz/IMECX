@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Edições — Imecx{% endblock %}
+
+{% block content %}
+<div class="container section">
+  <span class="section__label">Edições</span>
+  <h1 class="section__title">Cada ano, um novo desafio.</h1>
+  <p class="section__subtitle">Cada edição do Imecx tem um tema próprio, definido com os parceiros do programa, que orienta o trabalho das equipas durante o ano letivo.</p>
+
+  <div class="grid grid--2 mt-8" style="margin-top:3rem">
+    {% for e in editions %}
+      <article class="card">
+        <div class="edition-card__head">
+          <div class="edition-card__year">{{ e.year }}</div>
+          <span class="badge {% if e.status == 'open' %}badge--primary{% elif e.status == 'active' %}badge--dark{% else %}badge--muted{% endif %}">{{ e.get_status_display }}</span>
+        </div>
+        <h2 style="margin-top:1rem;font-size:1.4rem">{{ e.theme }}</h2>
+        <p style="color:var(--muted);margin-top:.5rem">{{ e.description|truncatewords:30 }}</p>
+        <a href="{% url 'editions:detail' e.year %}" class="btn-ghost mt-6" style="margin-top:1.5rem">Ver detalhes →</a>
+      </article>
+    {% empty %}
+      <p style="color:var(--muted)">Ainda não foram criadas edições. Cria a primeira no /admin.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Imecx {{ edition.year }} — {{ edition.theme }}{% endblock %}
+
+{% block content %}
+<div class="container section">
+  <a href="{% url 'editions:list' %}" style="color:var(--muted);font-size:.9rem">← Voltar a edições</a>
+  <div style="display:flex;align-items:center;gap:1rem;margin-top:1rem">
+    <span class="badge {% if edition.status == 'open' %}badge--primary{% else %}badge--muted{% endif %}">{{ edition.get_status_display }}</span>
+    <span style="font-family:var(--font-display);font-weight:600;color:var(--muted)">Edição {{ edition.year }}</span>
+  </div>
+  <h1 class="section__title">{{ edition.theme }}</h1>
+  <p class="section__subtitle">{{ edition.description }}</p>
+
+  <div class="grid grid--2 mt-8" style="margin-top:3rem">
+    <div class="card">
+      <h3>Abertura de candidaturas</h3>
+      <p style="color:var(--muted);margin-top:.5rem">{{ edition.applications_open|default:"A anunciar" }}</p>
+    </div>
+    <div class="card">
+      <h3>Fecho de candidaturas</h3>
+      <p style="color:var(--muted);margin-top:.5rem">{{ edition.applications_close|default:"A anunciar" }}</p>
+    </div>
+  </div>
+
+  {% if edition.status == "open" %}
+  <div style="margin-top:3rem">
+    <a href="{% url 'applications:apply' %}" class="btn-primary">Candidatar a esta edição</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "account/auth_base.html" %}
+
+{% block title %}
+Confirmar email — IMECX
+{% endblock %}
+
+{% block auth_content %}
+
+<div class="text-center">
+
+<h1 class="section__title">
+Confirmar endereço de email
+</h1>
+
+<p class="section__subtitle">
+
+Estás prestes a confirmar o teu endereço de email.
+
+</p>
+
+<form method="post">
+
+{% csrf_token %}
+
+<div class="mt-8">
+
+<button
+class="btn-primary"
+type="submit">
+
+Confirmar email
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+{% endblock %}

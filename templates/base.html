@@ -1,0 +1,250 @@
+{% load static %}
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Imecx — Programa Interdisciplinar de Engenharia{% endblock %}</title>
+  <meta name="description" content="{% block description %}Programa anual que junta estudantes de diferentes ramos de engenharia num projeto real e colaborativo.{% endblock %}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/pages.css' %}">
+  <link rel="stylesheet" href="{% static 'css/navbar_avatar.css' %}">
+
+  <script src="{% static 'js/perfil.js' %}"></script>
+  <script src="{% static 'js/navbar_avatar.js' %}" defer></script>
+  <script src="{% static 'js/notifications.js' %}" defer></script>
+
+  <script defer src="https://unpkg.com/htmx.org@2.0.3"></script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <header class="navbar">
+    <div class="container navbar__inner">
+      <a href="{% url 'core:home' %}" class="navbar__brand">
+        <img src="{% static 'img/logo.png' %}" alt="Logo" class="navbar__logo">
+      </a>
+      <ul class="navbar__links">
+        <li><a href="{% url 'core:home' %}" {% if request.path == '/' %}class="active"{% endif %}>Início</a></li>
+        <li><a href="{% url 'core:about' %}" {% if 'sobre' in request.path %}class="active"{% endif %}>Sobre</a></li>
+        <li><a href="{% url 'editions:list' %}" {% if 'edicoes' in request.path %}class="active"{% endif %}>Edições</a></li>
+        <li><a href="{% url 'applications:apply' %}" {% if 'candidaturas' in request.path %}class="active"{% endif %}>Candidaturas</a></li>
+        <li><a href="{% url 'core:contact' %}" {% if 'contacto' in request.path %}class="active"{% endif %}>Contacto</a></li>
+      </ul>
+      <div class="nav-actions" style="display:flex; align-items:center;">
+        <a href="{% url 'applications:apply' %}" class="btn-primary" style="font-size:.85rem">Candidatar-me</a>
+        
+        {% if user.is_authenticated %}
+
+        <div class="notification-wrapper">
+
+            <button
+                type="button"
+                class="notification-bell"
+                id="notificationToggle"
+            >
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002
+                        6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67
+                        6.165 6 8.388 6 11v3.159c0 .538-.214
+                        1.055-.595 1.436L4 17h5m6 0v1a3 3 0
+                        11-6 0v-1m6 0H9"
+                    />
+                </svg>
+
+                {% if unread_notifications > 0 %}
+                    <span class="notification-count">
+                        {{ unread_notifications }}
+                    </span>
+                {% endif %}
+
+            </button>
+
+            <div
+                class="notification-dropdown"
+                id="notificationDropdown"
+            >
+
+                <div class="notification-dropdown__header">
+                    Notificações
+                </div>
+
+                {% for notification in latest_notifications %}
+
+                <div class="notification-item">
+
+                    <a
+                        href="{% if notification.task %}{% url 'tasks:task_detail' notification.task.id %}{% else %}#{% endif %}"
+                        class="notification-item__content"
+                    >
+
+                        {% if notification.type == "task_assigned" %}
+
+                            <span class="badge badge--primary">
+                                Nova Task
+                            </span>
+
+                        {% elif notification.type == "task_feedback" %}
+
+                            <span class="notification-tag">
+                                Feedback
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge badge--muted">
+                                Informação
+                            </span>
+
+                        {% endif %}
+
+                        <strong>
+                            {{ notification.title }}
+                        </strong>
+
+                        <span>
+                            {{ notification.message|truncatechars:80 }}
+                        </span>
+
+                        <small class="notification-time">
+                            {{ notification.created_at|timesince }} atrás
+                        </small>
+
+                    </a>
+
+                    <a
+                        href="{% url 'tasks:mark_notification_read' notification.id %}"
+                        class="notification-dismiss"
+                        title="Marcar como lida"
+                    >
+                        ✕
+                    </a>
+
+                </div>
+
+                {% empty %}
+
+                    <div class="notification-empty">
+                        Sem notificações.
+                    </div>
+
+                {% endfor %}
+
+                {% if active_participation %}
+                <div class="notification-footer">
+
+                    {% if unread_notifications %}
+
+                        <a
+                            href="{% url 'tasks:mark_all_notifications_read' %}"
+                        >
+                            Marcar todas como lidas
+                        </a>
+
+                    {% endif %}
+
+                    {% if active_participation %}
+
+                        <a href="{% url 'tasks:my_tasks' %}">
+                            Ver todas as tasks
+                        </a>
+
+                    {% endif %}
+
+                </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+        
+        {% include "partials/navbar_avatar.html" %}
+        <button class="navbar__hamburger" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+    <nav class="navbar__mobile" id="mobileMenu" aria-hidden="true">
+      <a href="{% url 'core:home' %}" {% if request.path == '/' %}class="active"{% endif %}>Início</a>
+      <a href="{% url 'core:about' %}" {% if 'sobre' in request.path %}class="active"{% endif %}>Sobre</a>
+      <a href="{% url 'editions:list' %}" {% if 'edicoes' in request.path %}class="active"{% endif %}>Edições</a>
+      <a href="{% url 'applications:apply' %}" {% if 'candidaturas' in request.path %}class="active"{% endif %}>Candidaturas</a>
+      <a href="{% url 'core:contact' %}" {% if 'contacto' in request.path %}class="active"{% endif %}>Contacto</a>
+    </nav>
+  </header>
+
+  {% if messages %}
+    <div class="messages">
+      {% for m in messages %}
+        <div class="message {{ m.tags }}">{{ m }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div>
+        <a href="{% url 'core:home' %}" class="navbar__brand">
+          <img src="{% static 'img/logo_branco.png' %}" alt="Logo" class="navbar__logo">
+        </a>
+        <p style="margin-top:-10px;max-width:24rem;font-size:.9rem;opacity:.8">
+          Programa anual que reúne estudantes de diferentes ramos de engenharia num projeto interdisciplinar real.
+        </p>
+      </div>
+      <div>
+        <h4>Navegar</h4>
+        <ul>
+          <li><a style = "color: inherit;" href="{% url 'core:home' %}">Início</a></li>
+          <li><a style = "color: inherit;" href="{% url 'core:about' %}">Sobre</a></li>
+          <li><a style = "color: inherit;" href="{% url 'editions:list' %}">Edições</a></li>
+          <li><a style = "color: inherit;" href="{% url 'applications:apply' %}">Candidaturas</a></li>
+          <li><a style = "color: inherit;" href="{% url 'core:contact' %}">Contacto</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li>projetomecanicacoimbra@gmail.com</li>
+          <li><a style = "color: inherit;" target="_blank" href="https://maps.app.goo.gl/oMkutewkzhZVNcde8">Departamento de Engenharia Mecânica da Universidade de Coimbra</a><br></li>
+          <li>Portugal</li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer__bottom">
+      <span>© {% now "Y" %} Imecx. Todos os direitos reservados.</span>
+      <span>Programa interdisciplinar de engenharia</span>
+    </div>
+  </footer>
+
+  <div id="navBackdrop" class="nav-backdrop"></div>
+  <script src="{% static 'js/hamburger.js' %}"></script>
+  {% block extra_js %}
+  {% endblock %}
+</body>
+</html>

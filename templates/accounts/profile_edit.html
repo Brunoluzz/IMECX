@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Perfil — IMECX{% endblock %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+
+        <div class="card form-card">
+
+            <div class="text-center">
+
+                <span class="section__label">
+                    Área Pessoal
+                </span>
+
+                <h1 class="section__title">
+                    Editar Perfil
+                </h1>
+
+                <p class="section__subtitle">
+                    Atualiza os teus dados pessoais.
+                </p>
+
+            </div>
+
+            <form method="post" class="mt-8">
+
+                {% csrf_token %}
+
+                <div class="field">
+                    <label for="{{ user_form.first_name.id_for_label }}">
+                        Nome
+                    </label>
+
+                    {{ user_form.first_name }}
+
+                    {{ user_form.first_name.errors }}
+                </div>
+
+                <div class="field">
+                    <label for="{{ user_form.last_name.id_for_label }}">
+                        Apelido
+                    </label>
+
+                    {{ user_form.last_name }}
+
+                    {{ user_form.last_name.errors }}
+                </div>
+
+                <div class="field">
+                    <label for="{{ user_form.email.id_for_label }}">
+                        Email
+                    </label>
+
+                    {{ user_form.email }}
+
+                    {{ user_form.email.errors }}
+                </div>
+
+                <div class="field">
+                    <label for="{{ profile_form.phone.id_for_label }}">
+                        Telefone
+                    </label>
+
+                    {{ profile_form.phone }}
+
+                    {{ profile_form.phone.errors }}
+                </div>
+
+                <div class="field">
+                    <label for="{{ profile_form.bio.id_for_label }}">
+                        Sobre mim
+                    </label>
+
+                    {{ profile_form.bio }}
+
+                    {{ profile_form.bio.errors }}
+                </div>
+
+                <div class="mt-8 text-center">
+
+                    <button
+                        type="submit"
+                        class="btn-primary">
+
+                        Guardar Alterações
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "account/auth_base.html" %}
+{% load allauth account %}
+
+{% block title %}Entrar — IMECX{% endblock %}
+
+{% block auth_title %}
+Área de Participantes IMECX
+{% endblock %}
+
+{% block auth_subtitle %}
+<p class="section__subtitle">
+    Esta área destina-se exclusivamente a participantes atuais e antigos do IMECX.
+</p>
+
+<p class="section__subtitle" style="margin-top:1rem;">
+    O acesso é disponibilizado após a aceitação de uma candidatura. Se a tua candidatura for aprovada, receberás instruções para ativar a tua conta.
+</p>
+{% endblock %}
+
+{% block auth_content %}
+
+<form method="post"
+      action="{% url 'account_login' %}"
+      class="mt-8">
+
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="message error">
+
+            <span class="message-icon">
+                ⚠️
+            </span>
+
+            <div>
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+
+        </div>
+    {% endif %}
+
+    <div class="field">
+        <label for="{{ form.login.id_for_label }}">
+            Email
+        </label>
+
+        {{ form.login }}
+
+        {{ form.login.errors }}
+    </div>
+
+    <div class="field">
+        <label for="{{ form.password.id_for_label }}">
+            Palavra-passe
+        </label>
+
+        {{ form.password }}
+
+        {{ form.password.errors }}
+    </div>
+
+    {% if form.remember %}
+    <div class="field field--checkbox">
+        {{ form.remember }}
+
+        <label for="{{ form.remember.id_for_label }}">
+            Manter sessão iniciada
+        </label>
+    </div>
+    {% endif %}
+
+    {% if redirect_field_value %}
+        <input
+            type="hidden"
+            name="{{ redirect_field_name }}"
+            value="{{ redirect_field_value }}">
+    {% endif %}
+
+    <div class="form-actions">
+
+        <button class="btn-primary" type="submit">
+            Entrar
+        </button>
+
+        <div class="form-links">
+
+            <p>
+                <a href="{% url 'account_reset_password' %}">
+                    Esqueceste-te da palavra-passe?
+                </a>
+            </p>
+
+            <p>
+                Ainda não participaste no IMECX?
+                <a href="{% url 'applications:apply' %}">
+                    Submete uma candidatura
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="page">
+
+<div class="container">
+
+    <div class="card form-card">
+
+        <div class="form-header">
+
+            <span class="section__label">
+                Submissão
+            </span>
+
+            <h1 class="form-title">
+                {{ task.title }}
+            </h1>
+
+            <p class="form-subtitle">
+                {{ task.description }}
+            </p>
+
+        </div>
+
+        <form
+            method="post"
+            enctype="multipart/form-data"
+        >
+
+            {% csrf_token %}
+
+            {% for field in form %}
+
+                <div class="field">
+
+                    {{ field.label_tag }}
+
+                    {{ field }}
+
+                    {{ field.errors }}
+
+                </div>
+
+            {% endfor %}
+
+            <div class="form-actions">
+
+                {% if submission %}
+
+                    <button
+                        type="submit"
+                        class="btn-primary"
+                    >
+                        Alterar Submissão
+                    </button>
+
+                {% else %}
+
+                    <button
+                        type="submit"
+                        class="btn-primary"
+                    >
+                        Guardar Submissão
+                    </button>
+
+                {% endif %}
+
+                <a
+                    href="{% url 'tasks:task_detail' task.id %}"
+                    class="btn-ghost"
+                >
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</section>
+
+{% endblock %}

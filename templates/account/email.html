@@ -1,0 +1,66 @@
+{% extends "account/auth_base.html" %}
+{% load allauth account %}
+
+{% block title %}Endereço de email — IMECX{% endblock %}
+
+{% block auth_title %}
+Gerir email
+{% endblock %}
+
+{% block auth_subtitle %}
+<p class="section__subtitle">
+    Gere os endereços de email associados à tua conta.
+</p>
+{% endblock %}
+
+{% block auth_content %}
+
+<form method="post" class="mt-8">
+
+    {% csrf_token %}
+
+    {% for field in form %}
+
+        {% if field.field.widget.input_type == "checkbox" %}
+
+            <div class="field field--checkbox">
+
+                {{ field }}
+
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+
+            </div>
+
+        {% else %}
+
+            <div class="field">
+
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+
+                {{ field.errors }}
+
+            </div>
+
+        {% endif %}
+
+    {% endfor %}
+
+    <div class="form-actions">
+
+        <button class="btn-primary">
+
+            Guardar
+
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}

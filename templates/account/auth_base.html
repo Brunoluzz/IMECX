@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<main class="page">
+    <section class="section">
+        <div class="container">
+
+            <div class="card form-card">
+
+                <div class="form-header">
+
+                    <span class="section__label">
+                        Plataforma IMECX
+                    </span>
+
+                    <h1 class="section__title">
+                        {% block auth_title %}{% endblock %}
+                    </h1>
+
+                    {% block auth_subtitle %}
+                    {% endblock %}
+
+                </div>
+
+                {% block auth_content %}
+                {% endblock %}
+
+            </div>
+
+        </div>
+    </section>
+</main>
+
+{% endblock %}
