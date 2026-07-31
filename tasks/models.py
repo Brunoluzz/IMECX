@@ -1,5 +1,17 @@
 from django.db import models
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
+
+def validate_file_size(value):
+
+    #definir o tamanho
+    limit_mb = 20
+
+    if value.size > limit_mb * 1024 * 1024:
+        raise ValidationError(
+            f"Ficheiro demasiado grande. Máximo {limit_mb} MB."
+        )
 
 # Create your models here.
 class Task(models.Model):
@@ -68,8 +80,18 @@ class TaskSubmission(models.Model):
         on_delete=models.CASCADE
     )
 
+    #verificar as extensoes pretendidas
     file = models.FileField(
-        upload_to="task_submissions/"
+        upload_to="task_submissions/",
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions= [
+                    "zip,"
+                    "pdf",
+                ]
+            ),
+            validate_file_size,
+        ]
     )
 
     comment = models.TextField(blank=True)

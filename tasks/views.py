@@ -4,6 +4,7 @@ from .models import Task, TaskSubmission, Notification
 from django.core.exceptions import PermissionDenied
 from applications.models import Participation
 from .forms import TaskSubmissionForm
+from django.views.decorators.http import require_POST
 
 @login_required
 def my_tasks(request):
@@ -167,6 +168,7 @@ def task_detail(request, task_id):
     )
 
 @login_required
+@require_POST
 def mark_notification_read(request, pk):
 
     notification = get_object_or_404(
@@ -184,6 +186,7 @@ def mark_notification_read(request, pk):
 
 
 @login_required
+@require_POST
 def mark_all_notifications_read(request):
 
     request.user.notifications.filter(
