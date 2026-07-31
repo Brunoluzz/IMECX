@@ -2,6 +2,18 @@ from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
+from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
+
+def validate_file_size(value):
+
+    #definir o tamanho
+    limit_mb = 10
+
+    if value.size > limit_mb * 1024 * 1024:
+        raise ValidationError(
+            f"Ficheiro demasiado grande. Máximo {limit_mb} MB."
+        )
 
 class EngineeringArea(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -37,7 +49,16 @@ class Application(models.Model):
     course_year = models.PositiveSmallIntegerField()
     area = models.ForeignKey(EngineeringArea, on_delete=models.PROTECT)
     motivation = models.TextField()
-    cv = models.FileField(upload_to="cvs/", blank=True, null=True)
+    cv = models.FileField(
+        upload_to="cvs/",
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=["pdf"]
+            ),
+            validate_file_size,
+        ],
+        blank=True, 
+        null=True)
     status = models.CharField(max_length=20, choices=STATUS, default="pending")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

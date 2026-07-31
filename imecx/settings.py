@@ -11,6 +11,21 @@ BREVO_API_KEY = config("BREVO_API_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv())
 
+if not DEBUG:
+
+    SECURE_SSL_REDIRECT = True
+
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+    X_FRAME_OPTIONS = "DENY"
+
 INSTALLED_APPS = [
     "jazzmin",  # antes do admin
     "django.contrib.admin",
@@ -34,6 +49,8 @@ INSTALLED_APPS = [
     "accounts",
     "dashboard",
     "tasks",
+
+    "axes",
 ]
 
 MIDDLEWARE = [
@@ -48,6 +65,16 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
 ]
+
+MIDDLEWARE.insert(
+    2,
+    "axes.middleware.AxesMiddleware"
+)
+
+AXES_ENABLED = True
+AXES_FAILURE_LIMIT = 5
+AXES_COOLOFF_TIME = 1
+AXES_RESET_ON_SUCCESS = True
 
 ROOT_URLCONF = "imecx.urls"
 
@@ -109,6 +136,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Auth / allauth
 SITE_ID = 1
 AUTHENTICATION_BACKENDS = [
+    "axes.backends.AxesStandaloneBackend",
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
@@ -142,7 +170,7 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
 # impedir enumeração de emails
 ACCOUNT_PREVENT_ENUMERATION = True
 
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 
 ACCOUNT_ADAPTER = "accounts.adapter.IMECXAccountAdapter"
 
@@ -166,6 +194,10 @@ CLOUDINARY_URL = config("CLOUDINARY_URL", default="")
 if CLOUDINARY_URL and not DEBUG:
     INSTALLED_APPS += ["cloudinary", "cloudinary_storage"]
     DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+#Cookies mais seguros
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
 
 # Jazzmin
 JAZZMIN_SETTINGS = {
@@ -206,4 +238,25 @@ ACCOUNT_FORMS = {
     "signup": "accounts.allauth_forms.IMECXSignupForm",
     "reset_password": "accounts.allauth_forms.IMECXResetPasswordForm",
     "reset_password_key": "accounts.allauth_forms.IMECXResetPasswordKeyForm",
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    "handlers": {
+        "file": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "errors.log",
+        },
+    },
+
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+    },
 }
