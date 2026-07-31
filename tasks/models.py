@@ -86,7 +86,7 @@ class TaskSubmission(models.Model):
         validators=[
             FileExtensionValidator(
                 allowed_extensions= [
-                    "zip,"
+                    "zip",
                     "pdf",
                 ]
             ),
