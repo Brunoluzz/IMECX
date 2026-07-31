@@ -27,14 +27,3 @@ def apply(request):
 
 def thanks(request):
     return render(request, "applications/thanks.html")
-
-class ApplicationCreateView(LoginRequiredMixin, CreateView):
-    model = Application
-    fields = ["edition", "full_name", "email", "university", "course_year", "area", "motivation", "cv"]
-    login_url = "account_login"
-    template_name = "applications/application_form.html"
-    success_url = "/conta/area/"  # ajustamos para {% url %} quando tivermos o nome da rota
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
