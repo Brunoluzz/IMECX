@@ -126,8 +126,6 @@ The system was developed with a strong focus on usability, maintainability, prov
 
 ### Task Submission
 
-<img width="1862" height="953" alt="image" src="https://github.com/user-attachments/assets/d6d44c70-326e-4e5a-a69c-3b281e281ffa" />
-
 <img width="1861" height="954" alt="image" src="https://github.com/user-attachments/assets/7222caf6-8064-4bc6-9bc6-f7238b807d69" />
 
 <img width="1862" height="955" alt="image" src="https://github.com/user-attachments/assets/ea5dea9d-cbf5-46c5-aad1-e14fb27b19b0" />
