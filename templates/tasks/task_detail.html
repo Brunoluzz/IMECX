@@ -19,6 +19,10 @@
             {{ task.description }}
         </p>
 
+        <p class="mt-6">
+            <strong>Vale:</strong> {{ task.points_value }} pontos
+        </p>
+
         {% if task.deadline %}
 
             <div class="mt-6" style = "margin-bottom: 10px">
@@ -51,6 +55,12 @@
             {% else %}
                 <span class="badge badge--muted">
                     Submetida
+                </span>
+            {% endif %}
+
+            {% if submission.grade is not None %}
+                <span class="badge badge--dark">
+                    Nota: {{ submission.grade }} / {{ task.points_value }}
                 </span>
             {% endif %}
 

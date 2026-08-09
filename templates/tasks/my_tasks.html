@@ -44,6 +44,10 @@
                 {{ task.description|truncatechars:120 }}
             </p>
 
+            <p style="margin-top:.5rem;">
+                <strong>Vale:</strong> {{ task.points_value }} pontos
+            </p>
+
             {% if task.deadline %}
             <p style="margin-top:1rem;">
                 <strong>Até:</strong>
@@ -51,7 +55,7 @@
             </p>
             {% endif %}
 
-            {% with submission=task.submissions.first %}
+            {% with submission=task.submission %}
 
                 {% if submission %}
 
@@ -75,6 +79,12 @@
                         {% else %}
                             <span class="badge badge--muted">
                                 Submetida
+                            </span>
+                        {% endif %}
+
+                        {% if submission.grade is not None %}
+                            <span class="badge badge--dark">
+                                Nota: {{ submission.grade }} / {{ task.points_value }}
                             </span>
                         {% endif %}
 

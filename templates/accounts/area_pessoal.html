@@ -58,8 +58,18 @@
                     </span>
                 </div>
 
+                {% if active_participation.points_baseline is not None %}
+                <div>
+                    <strong>Pontuação:</strong>
+                    <span {% if active_participation.current_points == 0 %}style="color:#d62828;font-weight:700"{% endif %}>
+                        {{ active_participation.current_points }} / {{ active_participation.points_baseline }}
+                        {% if active_participation.current_points == 0 %}⚠{% endif %}
+                    </span>
+                </div>
+                {% endif %}
+
             </div>
-            
+
             <div class="dashboard-current-actions">
 
                 <a

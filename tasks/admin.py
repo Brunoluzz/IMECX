@@ -8,6 +8,7 @@ class TaskAdmin(admin.ModelAdmin):
     list_display = (
         "title",
         "edition",
+        "points_value",
         "deadline",
         "is_active",
         "submission_count",
@@ -71,6 +72,7 @@ class TaskSubmissionAdmin(admin.ModelAdmin):
         "task",
         "participant",
         "status",
+        "grade_display",
         "submitted_at",
     )
 
@@ -93,13 +95,34 @@ class TaskSubmissionAdmin(admin.ModelAdmin):
         "file",
         "comment",
         "status",
+        "task_max_points",
+        "grade",
         "admin_feedback",
     )
+
+    readonly_fields = (
+        "task_max_points",
+    )
+
+    def task_max_points(self, obj):
+        if obj.task_id:
+            return f"Esta task vale {obj.task.points_value} pontos."
+        return "—"
+
+    task_max_points.short_description = "Valor da task"
+
+    def grade_display(self, obj):
+        if obj.grade is None:
+            return "—"
+        return f"{obj.grade} / {obj.task.points_value}"
+
+    grade_display.short_description = "Nota"
 
     def save_model(self, request, obj, form, change):
 
         old_status = None
         old_feedback = None
+        old_grade = None
 
         if change:
 
@@ -109,6 +132,7 @@ class TaskSubmissionAdmin(admin.ModelAdmin):
 
             old_status = previous.status
             old_feedback = previous.admin_feedback
+            old_grade = previous.grade
 
         super().save_model(
             request,
@@ -121,6 +145,7 @@ class TaskSubmissionAdmin(admin.ModelAdmin):
             change and (
                 old_status != obj.status
                 or old_feedback != obj.admin_feedback
+                or old_grade != obj.grade
             )
         ):
 

@@ -17,6 +17,17 @@ class Edition(models.Model):
     status = models.CharField(max_length=20, choices=STATUS, default="upcoming")
     applications_open = models.DateField(null=True, blank=True)
     applications_close = models.DateField(null=True, blank=True)
+
+    initial_points = models.PositiveIntegerField(
+        "Pontos iniciais",
+        default=100,
+        help_text=(
+            "Pontos atribuidos a cada participante quando esta edicao "
+            "passa a 'A decorrer'. Quem chegar a 0 pontos fica marcado "
+            "para saida do programa (a decisao final e sempre manual)."
+        ),
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -55,4 +66,18 @@ class Edition(models.Model):
                 status="active"
             ).update(
                 status="completed"
+            )
+
+        if self.status == "active" and old_status != "active":
+
+            from applications.models import Participation
+
+            # So atribui a quem ainda nao tem pontos (evita reset de
+            # pontuacao caso o estado va e volte a "active").
+            Participation.objects.filter(
+                edition=self,
+                status="active",
+                points_baseline__isnull=True,
+            ).update(
+                points_baseline=self.initial_points
             )

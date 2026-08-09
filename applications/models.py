@@ -121,6 +121,15 @@ class Application(models.Model):
             defaults={
                 "application": self,
                 "status": "active",
+                # Se a edicao ja estiver "A decorrer" quando a
+                # candidatura e aceite, o participante entra logo
+                # com os pontos iniciais em vez de esperar por uma
+                # transicao de estado que ja aconteceu no passado.
+                "points_baseline": (
+                    self.edition.initial_points
+                    if self.edition.status == "active"
+                    else None
+                ),
             }
         )
 
@@ -193,6 +202,17 @@ class Participation(models.Model):
         blank=True
     )
 
+    points_baseline = models.PositiveIntegerField(
+        "Pontos iniciais",
+        null=True,
+        blank=True,
+        help_text=(
+            "Pontos com que o participante comecou a edicao. Fica "
+            "vazio ate a edicao passar a 'A decorrer'. A pontuacao "
+            "atual e calculada a partir daqui e das notas das tasks."
+        ),
+    )
+
     accepted_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -216,6 +236,31 @@ class Participation(models.Model):
     @property
     def is_past(self):
         return self.edition.status == "finished"
-    
+
+    @property
+    def current_points(self):
+        """
+        Pontuacao atual do participante nesta edicao, ou None se
+        ainda nao foram atribuidos pontos iniciais (edicao ainda nao
+        esta "A decorrer"). Cada task avaliada faz perder
+        (task.points_value - nota) pontos; tasks sem submissao ou
+        sem nota atribuida nao penalizam. Nunca desce abaixo de 0.
+        """
+
+        if self.points_baseline is None:
+            return None
+
+        lost = sum(
+            submission.task.points_value - submission.grade
+            for submission in self.submissions.select_related("task")
+            if submission.grade is not None
+        )
+
+        return max(0, self.points_baseline - lost)
+
+    @property
+    def has_zero_points(self):
+        return self.points_baseline is not None and self.current_points == 0
+
     def __str__(self):
         return f"{self.user.email} - {self.edition.year}"

@@ -38,6 +38,16 @@ class Task(models.Model):
         blank=True
     )
 
+    points_value = models.PositiveIntegerField(
+        "Pontos da task",
+        default=10,
+        help_text=(
+            "Quanto vale esta task. Um participante que receba a "
+            "nota maxima nao perde pontos; nota 0 faz perder estes "
+            "pontos todos."
+        ),
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True
     )
@@ -79,7 +89,8 @@ class TaskSubmission(models.Model):
 
     participant = models.ForeignKey(
         "applications.Participation",
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="submissions"
     )
 
     #verificar as extensoes pretendidas
@@ -105,11 +116,29 @@ class TaskSubmission(models.Model):
 
     admin_feedback = models.TextField(blank=True)
 
+    grade = models.PositiveIntegerField(
+        "Nota",
+        null=True,
+        blank=True,
+        help_text="Nota de 0 ate ao valor da task. Deixar vazio enquanto nao for avaliada.",
+    )
+
     class Meta:
         unique_together = (
             "task",
             "participant"
         )
+
+    def clean(self):
+        super().clean()
+
+        if self.grade is not None and self.task_id and self.grade > self.task.points_value:
+            raise ValidationError({
+                "grade": (
+                    f"A nota nao pode ser maior do que o valor da "
+                    f"task ({self.task.points_value} pontos)."
+                )
+            })
 
     def __str__(self):
         return f"{self.participant.user.email} - {self.task.title}"

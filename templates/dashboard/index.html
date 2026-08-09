@@ -12,6 +12,20 @@
     <div class="card text-center"><div class="stats__num">{{ stats.editions }}</div><div class="stats__lbl">Edições</div></div>
   </div>
 
+  {% if zero_points %}
+  <div class="card mt-8" style="margin-top:2rem;border-left:4px solid #d62828">
+    <h3 style="color:#d62828">⚠ {{ stats.zero_points_count }} participante{{ stats.zero_points_count|pluralize }} a 0 pontos</h3>
+    <p style="color:var(--muted);margin-top:.5rem">
+      Chegaram a 0 pontos mas continuam marcados como ativos — a remoção do programa é sempre uma decisão manual.
+    </p>
+    <ul style="margin-top:1rem">
+      {% for p in zero_points %}
+        <li><a href="/admin/applications/participation/{{ p.pk }}/change/">{{ p.user.email }}</a> — {{ p.edition }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
   <p style="margin-top:2rem;color:var(--muted)">Para gestão completa, vai ao <a href="/admin/">Django Admin</a>.</p>
 </div>
 {% endblock %}
