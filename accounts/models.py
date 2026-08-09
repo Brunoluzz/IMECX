@@ -25,6 +25,10 @@ class Profile(models.Model):
         default=Role.FUNCIONARIO,
     )
 
+    class Meta:
+        verbose_name = "Perfil"
+        verbose_name_plural = "Perfis"
+
     @property
     def initials(self) -> str:
         u = self.user

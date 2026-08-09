@@ -217,6 +217,8 @@ class Participation(models.Model):
 
     class Meta:
         unique_together = ("user", "edition")
+        verbose_name = "Participação"
+        verbose_name_plural = "Participações"
 
     @classmethod
     def get_for_user_and_edition(cls, user, edition):

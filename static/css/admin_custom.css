@@ -1,0 +1,72 @@
+/*
+  Aplica a identidade visual do site IMECX (cores e tipografia de
+  static/css/base.css) ao admin do Django/Jazzmin. Sobrepoe apenas
+  cores, fontes e cantos arredondados — nao mexe em layout/grid do
+  AdminLTE/Bootstrap, para nao arriscar partir o painel.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700&display=swap');
+
+:root {
+  --imecx-blue: #2196F3;
+  --imecx-blue-dark: #1E3A5F;
+  --imecx-blue-hover: #1E5BAA;
+  --imecx-blue-soft: #EAF4FE;
+
+  --bs-primary: var(--imecx-blue);
+  --bs-primary-rgb: 33, 150, 243;
+  --bs-link-color: var(--imecx-blue);
+  --bs-link-hover-color: var(--imecx-blue-hover);
+}
+
+body, .content-wrapper, .card, .form-control, .btn {
+  font-family: 'Nunito', system-ui, sans-serif;
+}
+
+.brand-text,
+.card-title,
+h1, h2, h3, h4, h5,
+.small-box h3 {
+  font-family: 'Exo 2', system-ui, sans-serif;
+}
+
+/* Sidebar e navbar escuros, mas com o azul do site em vez do
+   azul/preto generico do AdminLTE */
+.main-sidebar,
+.main-sidebar .brand-link,
+.main-header.navbar {
+  background-color: var(--imecx-blue-dark) !important;
+  border-color: var(--imecx-blue-dark) !important;
+}
+
+.nav-sidebar > .nav-item > .nav-link.active,
+.nav-sidebar .nav-treeview > .nav-item > .nav-link.active {
+  background-color: var(--imecx-blue) !important;
+}
+
+a {
+  color: var(--imecx-blue);
+}
+
+a:hover {
+  color: var(--imecx-blue-hover);
+}
+
+.btn-primary {
+  background-color: var(--imecx-blue) !important;
+  border-color: var(--imecx-blue) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--imecx-blue-hover) !important;
+  border-color: var(--imecx-blue-hover) !important;
+}
+
+.card, .small-box, .callout {
+  border-radius: 12px;
+}
+
+.badge.bg-primary,
+.badge-primary {
+  background-color: var(--imecx-blue) !important;
+}

@@ -63,6 +63,10 @@ class Task(models.Model):
         default=True
     )
 
+    class Meta:
+        verbose_name = "Tarefa"
+        verbose_name_plural = "Tarefas"
+
     def __str__(self):
         return self.title
 
@@ -128,6 +132,8 @@ class TaskSubmission(models.Model):
             "task",
             "participant"
         )
+        verbose_name = "Submissão"
+        verbose_name_plural = "Submissões"
 
     def clean(self):
         super().clean()
@@ -186,6 +192,8 @@ class Notification(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        verbose_name = "Notificação"
+        verbose_name_plural = "Notificações"
 
     def __str__(self):
         return f"{self.recipient.email} - {self.title}"

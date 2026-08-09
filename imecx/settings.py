@@ -215,29 +215,58 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Bem-vindo à Administração Imecx",
     "copyright": "Imecx",
     "show_ui_builder": False,
+
+    "site_logo": "img/logo_branco.png",
+    "login_logo": "img/logo.png",
     "site_logo_classes": "img-circle",
+
+    "custom_css": "css/admin_custom.css",
+
     "topmenu_links": [
         {"name": "Ver site", "url": "/", "new_window": True},
+        {"name": "Dashboard", "url": "/dashboard/"},
         {"app": "editions"},
     ],
-    "order_with_respect_to": ["editions", "applications", "accounts", "auth"],
+
+    # Ordem de navegacao pensada pelo fluxo de trabalho: primeiro
+    # candidaturas/edicoes (quem entra), depois tarefas (o que se
+    # faz durante o programa), por fim contas/permissoes.
+    "order_with_respect_to": [
+        "editions",
+        "applications",
+        "tasks",
+        "accounts",
+        "auth",
+    ],
+
     "hide_apps": ["sites", "socialaccount"],
+    "hide_models": ["account.emailaddress", "account.emailconfirmation"],
+
     "icons": {
         "editions.Edition": "fas fa-calendar-alt",
         "applications.Application": "fas fa-file-signature",
         "applications.EngineeringArea": "fas fa-cogs",
+        "applications.Participation": "fas fa-user-check",
+        "tasks.Task": "fas fa-tasks",
+        "tasks.TaskSubmission": "fas fa-upload",
+        "tasks.Notification": "fas fa-bell",
         "accounts.Profile": "fas fa-id-badge",
         "auth.User": "fas fa-user",
-        "auth.Group": "fas fa-users",
+        "auth.Group": "fas fa-users-cog",
     },
+
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+
+    "changeform_format": "horizontal_tabs",
 }
 
 JAZZMIN_UI_TWEAKS = {
     "theme": "flatly",
-    "dark_mode_theme": "darkly",
     "navbar": "navbar-dark",
     "sidebar": "sidebar-dark-primary",
     "brand_colour": "navbar-primary",
+    "default_theme_mode": "light",
 }
 
 LOGIN_URL = "/conta/login/"
