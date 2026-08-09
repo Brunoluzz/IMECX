@@ -1,8 +1,13 @@
 /*
-  Aplica a identidade visual do site IMECX (cores e tipografia de
-  static/css/base.css) ao admin do Django/Jazzmin. Sobrepoe apenas
-  cores, fontes e cantos arredondados — nao mexe em layout/grid do
-  AdminLTE/Bootstrap, para nao arriscar partir o painel.
+  Aplica a identidade visual do site IMECX ao admin.
+
+  Jazzmin 3.x usa AdminLTE4 + Bootstrap 5.3, com variaveis CSS
+  proprias (--lte-*) para a sidebar (que fica sempre escura,
+  data-bs-theme="dark", independente do tema da pagina) e as
+  variaveis --bs-* do Bootstrap para o resto. Os nomes abaixo foram
+  confirmados a ler o CSS fonte do pacote instalado (nao adivinhados),
+  depois de um primeiro CSS ter partido a navbar (texto branco sobre
+  fundo branco por causa de "navbar-dark" sem fundo escuro).
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700&display=swap');
@@ -11,11 +16,13 @@
   --imecx-blue: #2196F3;
   --imecx-blue-dark: #1E3A5F;
   --imecx-blue-hover: #1E5BAA;
-  --imecx-blue-soft: #EAF4FE;
 
+  /* Cor de acao do Bootstrap: botoes, badges, links de conteudo,
+     bordas de foco, etc. */
   --bs-primary: var(--imecx-blue);
   --bs-primary-rgb: 33, 150, 243;
   --bs-link-color: var(--imecx-blue);
+  --bs-link-color-rgb: 33, 150, 243;
   --bs-link-hover-color: var(--imecx-blue-hover);
 }
 
@@ -30,26 +37,19 @@ h1, h2, h3, h4, h5,
   font-family: 'Exo 2', system-ui, sans-serif;
 }
 
-/* Sidebar e navbar escuros, mas com o azul do site em vez do
-   azul/preto generico do AdminLTE */
-.main-sidebar,
-.main-sidebar .brand-link,
-.main-header.navbar {
-  background-color: var(--imecx-blue-dark) !important;
-  border-color: var(--imecx-blue-dark) !important;
+/* Sidebar: fica sempre escura (decisao do proprio Jazzmin), mas
+   com o azul-escuro da marca em vez do cinzento generico, e o item
+   ativo destacado a azul em vez do branco semi-transparente padrao. */
+.app-sidebar {
+  --bs-secondary-bg: var(--imecx-blue-dark) !important;
+  --lte-sidebar-menu-active-bg: var(--imecx-blue) !important;
+  --lte-sidebar-menu-active-color: #fff !important;
+  --lte-sidebar-active-color: #fff !important;
+  --lte-sidebar-hover-bg: rgba(255, 255, 255, .12) !important;
 }
 
-.nav-sidebar > .nav-item > .nav-link.active,
-.nav-sidebar .nav-treeview > .nav-item > .nav-link.active {
-  background-color: var(--imecx-blue) !important;
-}
-
-a {
-  color: var(--imecx-blue);
-}
-
-a:hover {
-  color: var(--imecx-blue-hover);
+.brand-link {
+  border-bottom-color: rgba(255, 255, 255, .15) !important;
 }
 
 .btn-primary {
@@ -64,9 +64,4 @@ a:hover {
 
 .card, .small-box, .callout {
   border-radius: 12px;
-}
-
-.badge.bg-primary,
-.badge-primary {
-  background-color: var(--imecx-blue) !important;
 }

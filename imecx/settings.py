@@ -263,9 +263,10 @@ JAZZMIN_SETTINGS = {
 
 JAZZMIN_UI_TWEAKS = {
     "theme": "flatly",
-    "navbar": "navbar-dark",
+    # "navbar-dark" sem um fundo escuro deixa o texto branco sobre
+    # fundo branco (bug que apanhamos). O site publico tem a navbar
+    # clara tambem, por isso ficamos com o padrao "navbar-light".
     "sidebar": "sidebar-dark-primary",
-    "brand_colour": "navbar-primary",
     "default_theme_mode": "light",
 }
 
