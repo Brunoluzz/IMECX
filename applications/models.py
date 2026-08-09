@@ -5,6 +5,8 @@ from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
 
+from core.storage import private_storage, cv_upload_path
+
 def validate_file_size(value):
 
     #definir o tamanho
@@ -50,14 +52,15 @@ class Application(models.Model):
     area = models.ForeignKey(EngineeringArea, on_delete=models.PROTECT)
     motivation = models.TextField()
     cv = models.FileField(
-        upload_to="cvs/",
+        upload_to=cv_upload_path,
+        storage=private_storage,
         validators=[
             FileExtensionValidator(
                 allowed_extensions=["pdf"]
             ),
             validate_file_size,
         ],
-        blank=True, 
+        blank=True,
         null=True)
     status = models.CharField(max_length=20, choices=STATUS, default="pending")
     created_at = models.DateTimeField(auto_now_add=True)

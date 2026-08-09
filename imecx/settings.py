@@ -26,6 +26,8 @@ if not DEBUG:
 
     X_FRAME_OPTIONS = "DENY"
 
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
 INSTALLED_APPS = [
     "jazzmin",  # antes do admin
     "django.contrib.admin",
@@ -64,6 +66,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
+    "core.middleware.SecurityHeadersMiddleware",
 ]
 
 MIDDLEWARE.insert(
@@ -130,6 +133,10 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Ficheiros sensiveis (CVs, submissoes de tasks): fora da pasta
+# publica MEDIA_ROOT, só acessiveis via core.views.secure_media.
+PRIVATE_MEDIA_ROOT = BASE_DIR / "private_media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -223,6 +230,7 @@ JAZZMIN_SETTINGS = {
         "auth.Group": "fas fa-users",
     },
 }
+
 JAZZMIN_UI_TWEAKS = {
     "theme": "flatly",
     "dark_mode_theme": "darkly",

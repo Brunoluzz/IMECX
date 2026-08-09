@@ -3,6 +3,8 @@ from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
 
+from core.storage import private_storage, task_submission_upload_path
+
 def validate_file_size(value):
 
     #definir o tamanho
@@ -82,7 +84,8 @@ class TaskSubmission(models.Model):
 
     #verificar as extensoes pretendidas
     file = models.FileField(
-        upload_to="task_submissions/",
+        upload_to=task_submission_upload_path,
+        storage=private_storage,
         validators=[
             FileExtensionValidator(
                 allowed_extensions= [
