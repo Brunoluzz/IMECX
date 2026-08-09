@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Acesso não autorizado — Imecx{% endblock %}
+
+{% block content %}
+<div class="container section text-center">
+  <div style="font-size:4rem">🔒</div>
+  <h1 class="section__title" style="margin-top:1rem">Não tens acesso a esta página</h1>
+  <p class="section__subtitle" style="margin-inline:auto">
+    Não tens permissões para ver este conteúdo. Se achas que é um engano, contacta a equipa do Imecx.
+  </p>
+  <a href="{% url 'core:home' %}" class="btn-primary mt-8" style="margin-top:2rem">Voltar ao início</a>
+</div>
+{% endblock %}
