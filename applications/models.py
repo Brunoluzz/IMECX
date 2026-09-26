@@ -4,6 +4,7 @@ from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 from core.storage import private_storage, cv_upload_path
 
@@ -91,6 +92,11 @@ class Application(models.Model):
                 "last_name": last_name,
             }
         )
+
+        if not created and not user.first_name and not user.last_name:
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save(update_fields=["first_name", "last_name"])
 
         if created:
 
@@ -234,23 +240,24 @@ class Participation(models.Model):
             and self.edition.status == "active"
         )
 
-
     @property
     def is_past(self):
         return self.edition.status == "finished"
 
     @property
     def current_points(self):
-        """
-        Pontuacao atual do participante nesta edicao, ou None se
-        ainda nao foram atribuidos pontos iniciais (edicao ainda nao
-        esta "A decorrer"). Cada task avaliada faz perder
-        (task.points_value - nota) pontos; tasks sem submissao ou
-        sem nota atribuida nao penalizam. Nunca desce abaixo de 0.
-        """
-
         if self.points_baseline is None:
             return None
+
+        tasks_por_fechar = self.tasks.filter(
+            is_active=True,
+            deadline__lt=timezone.now(),
+        ).exclude(
+            submissions__participant=self
+        )
+
+        for task in tasks_por_fechar:
+            task.close_missing_submissions()
 
         lost = sum(
             submission.task.points_value - submission.grade
@@ -265,4 +272,5 @@ class Participation(models.Model):
         return self.points_baseline is not None and self.current_points == 0
 
     def __str__(self):
-        return f"{self.user.email} - {self.edition.year}"
+        full_name = f"{self.user.first_name} {self.user.last_name}".strip()
+        return full_name if full_name else self.user.email

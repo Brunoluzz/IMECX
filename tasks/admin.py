@@ -74,12 +74,14 @@ class TaskSubmissionAdmin(admin.ModelAdmin):
         "status",
         "grade_display",
         "submitted_at",
+        "is_missing",
     )
 
     list_filter = (
         "task",
         "status",
         "task__edition",
+        "is_missing",
     )
 
     search_fields = (
@@ -94,6 +96,7 @@ class TaskSubmissionAdmin(admin.ModelAdmin):
         "participant",
         "file",
         "comment",
+        "submitted_at",
         "status",
         "task_max_points",
         "grade",

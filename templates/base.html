@@ -38,7 +38,7 @@
         <li><a href="{% url 'core:contact' %}" {% if 'contacto' in request.path %}class="active"{% endif %}>Contacto</a></li>
       </ul>
       <div class="nav-actions" style="display:flex; align-items:center;">
-        <a href="{% url 'applications:apply' %}" class="btn-primary" style="font-size:.85rem">Candidatar-me</a>
+        <a href="{% url 'applications:apply' %}" class="btn-primary" style="font-size:.85rem"; white-space: nowrap;>Candidatar-me</a>
         
         {% if user.is_authenticated %}
 

@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 from core.storage import private_storage, task_submission_upload_path
 
@@ -70,6 +71,28 @@ class Task(models.Model):
     def __str__(self):
         return self.title
 
+    def close_missing_submissions(self):
+        """
+        Cria submissoes automaticas (nota 0, is_missing=True) para
+        participantes atribuidos que nao entregaram ate ao deadline.
+        """
+        if not self.deadline or self.deadline > timezone.now():
+            return
+
+        ja_submeteram = set(
+            self.submissions.values_list("participant_id", flat=True)
+        )
+
+        em_falta = self.assigned_participants.exclude(id__in=ja_submeteram)
+
+        for participation in em_falta:
+            TaskSubmission.objects.create(
+                task=self,
+                participant=participation,
+                grade=0,
+                is_missing=True,
+            )
+
 class TaskSubmission(models.Model):
 
     STATUS = [
@@ -109,13 +132,22 @@ class TaskSubmission(models.Model):
                 ]
             ),
             validate_file_size,
-        ]
+        ],
+        blank=True,
+        null=True,  #Permite submissoes sem ficheiro porque as submissões automáticas não têm ficheiro
     )
 
     comment = models.TextField(blank=True)
 
     submitted_at = models.DateTimeField(
-        auto_now_add=True
+        null=True, 
+        blank=True
+    )
+
+    is_missing = models.BooleanField(
+        "Não entregue (automática)",
+        default=False,
+        help_text="Gerada automaticamente porque o prazo expirou sem entrega.",
     )
 
     admin_feedback = models.TextField(blank=True)
@@ -145,6 +177,21 @@ class TaskSubmission(models.Model):
                     f"task ({self.task.points_value} pontos)."
                 )
             })
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            original_file = TaskSubmission.objects.filter(
+                pk=self.pk
+            ).values_list("file", flat=True).first()
+
+            ficheiro_mudou = original_file != (self.file.name if self.file else None)
+        else:
+            ficheiro_mudou = bool(self.file)
+
+        if self.file and not self.is_missing and ficheiro_mudou:
+            self.submitted_at = timezone.now()
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.participant.user.email} - {self.task.title}"

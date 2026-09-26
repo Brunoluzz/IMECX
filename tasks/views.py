@@ -98,6 +98,8 @@ def submit_task(request, task_id):
 
             submission.task = task
             submission.participant = participation
+            submission.is_missing = False
+            submission.grade = None
 
             submission.save()
 
