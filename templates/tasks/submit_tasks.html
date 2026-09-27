@@ -47,23 +47,33 @@
 
             <div class="form-actions">
 
-                {% if submission %}
+                {% if task.is_active %}
 
-                    <button
-                        type="submit"
-                        class="btn-primary"
-                    >
-                        Alterar Submissão
-                    </button>
+                    {% if submission %}
+
+                        <button
+                            type="submit"
+                            class="btn-primary"
+                        >
+                            Alterar Submissão
+                        </button>
+
+                    {% else %}
+
+                        <button
+                            type="submit"
+                            class="btn-primary"
+                        >
+                            Guardar Submissão
+                        </button>
+
+                    {% endif %}
 
                 {% else %}
 
-                    <button
-                        type="submit"
-                        class="btn-primary"
-                    >
-                        Guardar Submissão
-                    </button>
+                    <p class="form-disabled-notice">
+                        Esta tarefa foi arquivada e já não aceita submissões.
+                    </p>
 
                 {% endif %}
 

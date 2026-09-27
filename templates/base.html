@@ -25,6 +25,7 @@
   {% block extra_head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
+  {% csrf_token %}
   <header class="navbar">
     <div class="container navbar__inner">
       <a href="{% url 'core:home' %}" class="navbar__brand">
@@ -130,13 +131,14 @@
 
                     </a>
 
-                    <a
-                        href="{% url 'tasks:mark_notification_read' notification.id %}"
+                    <button
+                        type="button"
                         class="notification-dismiss"
                         title="Marcar como lida"
+                        data-mark-read-url="{% url 'tasks:mark_notification_read' notification.id %}"
                     >
                         ✕
-                    </a>
+                    </button>
 
                 </div>
 
@@ -153,11 +155,13 @@
 
                     {% if unread_notifications %}
 
-                        <a
-                            href="{% url 'tasks:mark_all_notifications_read' %}"
-                        >
-                            Marcar todas como lidas
-                        </a>
+                      <button
+                          type="button"
+                          class="notification-mark-all-btn"
+                          data-mark-all-url="{% url 'tasks:mark_all_notifications_read' %}"
+                      >
+                          Marcar todas como lidas
+                      </button>
 
                     {% endif %}
 

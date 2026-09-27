@@ -19,7 +19,7 @@
 .navbar__brand { display: flex; align-items: center; gap: .6rem; font-family: var(--font-display); font-weight: 800; color: var(--blue-dark); text-decoration: none; }
 .navbar__brand:hover { text-decoration: none; }
 .navbar__logo {
-  height: 120px !important;      
+  height: clamp(50px, 12vw, 120px) !important;      
   width: auto;       
   display: block;   
   object-fit: contain;
@@ -33,8 +33,8 @@
   justify-content: center;
   align-items: center;
   gap: 5px;
-  width: 40px;
-  height: 40px;
+  width: clamp(36px, 8vw, 40px);
+  height: clamp(36px, 8vw, 40px);
   background: none;
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -153,12 +153,17 @@
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 1rem; /* Define a distância entre o botão e o hambúrguer */
+  gap: clamp(.5rem, 2vw, 1rem); /* Define a distância entre o botão e o hambúrguer */
+}
+
+.nav-actions .btn-primary {
+  padding: clamp(.6rem, 1.5vw, .8rem) clamp(1rem, 3vw, 1.4rem);
+  font-size: clamp(.8rem, 2vw, .85rem) !important;
 }
 
 .user-avatar {
-    width: 42px;
-    height: 42px;
+    width: clamp(38px, 8vw, 42px);
+    height: clamp(38px, 8vw, 42px);
     border-radius: 50%;
 
     display: flex;
@@ -166,7 +171,7 @@
     justify-content: center;
 
     color: white;
-    font-size: 18px;
+    font-size: clamp(15px, 3.5vw, 18px);
     font-weight: 700;
     text-decoration: none;
 

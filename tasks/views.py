@@ -5,6 +5,7 @@ from django.core.exceptions import PermissionDenied
 from applications.models import Participation
 from .forms import TaskSubmissionForm
 from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 
 @login_required
 def my_tasks(request):
@@ -26,6 +27,9 @@ def my_tasks(request):
     revision_count = 0
     approved_count = 0
 
+    active_tasks = []
+    archived_tasks = []
+
     for task in tasks:
 
         submission = TaskSubmission.objects.filter(
@@ -44,12 +48,18 @@ def my_tasks(request):
         elif submission.status == "approved":
             approved_count += 1
 
+        if task.is_active:
+            active_tasks.append(task)
+        else:
+            archived_tasks.append(task)
+
     return render(
         request,
         "tasks/my_tasks.html",
         {
             "participation": participation,
-            "tasks": tasks,
+            "active_tasks": active_tasks,
+            "archived_tasks": archived_tasks,
             "pending_count": pending_count,
             "revision_count": revision_count,
             "approved_count": approved_count,
@@ -86,10 +96,13 @@ def submit_task(request, task_id):
 
     if request.method == "POST":
 
+        if not task.is_active:
+            raise PermissionDenied
+
         form = TaskSubmissionForm(
             request.POST,
             request.FILES,
-            instance=existing_submission
+            instance=existing_submission,
         )
 
         if form.is_valid():
@@ -119,7 +132,8 @@ def submit_task(request, task_id):
     else:
 
         form = TaskSubmissionForm(
-            instance=existing_submission
+            instance=existing_submission,
+            disabled=not task.is_active,
         )
 
     return render(
@@ -182,6 +196,9 @@ def mark_notification_read(request, pk):
     notification.is_read = True
     notification.save()
 
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return JsonResponse({"ok": True})
+
     return redirect(
         request.META.get("HTTP_REFERER", "/")
     )
@@ -196,6 +213,9 @@ def mark_all_notifications_read(request):
     ).update(
         is_read=True
     )
+
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return JsonResponse({"ok": True})
 
     return redirect(
         request.META.get("HTTP_REFERER", "/")

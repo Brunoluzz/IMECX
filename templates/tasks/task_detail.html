@@ -119,12 +119,24 @@
 
         <div class="form-actions">
 
-            <a
-                href="{% url 'tasks:submit_task' task.id %}"
-                class="btn-primary"
-            >
-                Submeter Trabalho
-            </a>
+            {% if task.is_active %}
+                <a
+                    href="{% url 'tasks:submit_task' task.id %}"
+                    class="btn-primary"
+                >
+                    Submeter Trabalho
+                </a>
+               
+            {% else %}    
+
+                <a
+                    href="{% url 'tasks:submit_task' task.id %}"
+                    class="btn-primary"
+                >
+                    Ver submissão
+                </a>
+
+            {% endif %}     
 
             <a
                 href="{% url 'tasks:my_tasks' %}"
